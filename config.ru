@@ -1,4 +1,8 @@
-require "sinatra/base"
-require_relative "server"
+require "sinatra"
+require 'bundler/setup'
+require "faker"
+require "pg"
+require "pry"
+require_relative "internal_wiki"
 
-run Internal_Wiki::Server
+run InternalWiki::Server
