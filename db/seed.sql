@@ -11,4 +11,6 @@ CREATE TABLE article_list (
 INSERT INTO article_list
 	(category, author, title, rating, date_created)
 VALUES
-('food', 'Amelia Kaufman', 'Food, eat it all', '4', 'January 1, 2016' );
+('food', 'Amelia Kaufman', 'Food, eat it all', '4', 'January 1, 2016' ),
+('drink', 'Samuel Erickson', 'Drink, drink it all', '5', 'January 2, 2016' );
+
