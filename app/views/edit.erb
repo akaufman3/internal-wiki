@@ -1,0 +1,25 @@
+<section id="main" class="articleContainer">
+	<% @article_info.each do |data| %>
+		<form class="edit" action ="/edit" method="post">
+			<div class="input-row">
+				<input type="submit" value="Save" />
+			</div>
+
+			<div class="input-row">
+				<label for="title">Title: </label>
+				<input type="text" name="title" value="<%= data['title'] %>"/>
+			</div>
+
+			<div class="input-row">
+				<label for="author">Author: </label>
+				<input type="text" name="author" value="<%= data['author'] %>"/>
+			</div>
+
+			<div class="input-row">
+				<label for="copy">Copy: </label>
+				<textarea type="text" name="copy"><%= data['markup'] %></textarea>
+			</div>
+		</form>
+	<% end %>
+	<div class="clearfix"></div>
+</section>

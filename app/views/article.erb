@@ -1,0 +1,20 @@
+<section id="main" class="articleContainer">
+	<article class="article">
+		<% @article_info.each do |data| %>
+			<form action="/edit/<%= data['id'] %>">
+    			<input type="submit" value="EDIT">
+			</form>
+			<section class="bArticleInfo">
+				<h2><%= data['date_created'] %></h2>
+				<h1><%= data['title'] %></h1>
+				<h3><%= data['author'] %></h3>
+				<h4><%= data['category'] %></h4>
+				<h4><%= data['rating'] %></h4>
+			</section>
+			<section class="articleContent">
+				<p><%= data['markup'] %></p>
+			</section>
+		<% end %>
+	</article>
+	<div class="clearfix"></div>
+</section>

@@ -9,4 +9,20 @@ class InternalWiki::Server < Sinatra::Base
 		erb :index
 	end
 
+	get "/:article_id" do
+		@article_id = params[:article_id].to_i
+		@article_info = db.exec("SELECT * FROM article WHERE id = #{@article_id}").to_a
+		erb :article
+	end
+
+	get "/edit/:article_id" do
+		@article_id = params[:article_id].to_i
+		@article_info = db.exec("SELECT * FROM article WHERE id = #{@article_id}").to_a
+		erb :edit
+	end
+
+	get "/add/" do
+		erb :add
+	end
+
 end
