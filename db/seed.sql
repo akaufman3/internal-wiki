@@ -10,7 +10,7 @@ CREATE TABLE article (
 	article_log_id  INTEGER NOT NULL,
 	comments_id		INTEGER NOT NULL,
 	date_created	VARCHAR NOT NULL,
-	markup			VARCHAR NOT NULL,
+	copy			VARCHAR NOT NULL,
 	rating			INTEGER,
 	id 				SERIAL PRIMARY KEY
 );
@@ -25,7 +25,7 @@ CREATE TABLE article_list (
 );
 
 INSERT INTO article
-	(author_id, user_id, author, title, category, article_log_id, comments_id, date_created, markup, rating, id)
+	(author_id, user_id, author, title, category, article_log_id, comments_id, date_created, copy, rating, id)
 VALUES
 (1, 1, 'Amelia Kaufman', 'Food, eat it all', 'food', 1, 1, 'January 1, 2016', 'hello', '5', 1),
 (1, 1, 'Amelia Kaufman', 'Drink, eat it all', 'drink', 1, 1, 'January 1, 2016', 'yo', '4', 2);

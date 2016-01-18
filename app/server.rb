@@ -25,4 +25,19 @@ class InternalWiki::Server < Sinatra::Base
 		erb :add
 	end
 
+	post "/add/" do
+		title = params["title"]
+    	author = params["author"]
+    	copy = params["copy"]
+
+    	db.exec_params(
+    		"INSERT INTO article (title, author, copy) VALUES ($1, $2, $3)",
+    		[title, author, copy]
+    	)
+
+    	@article_submitted = true
+
+		erb :add
+	end
+
 end

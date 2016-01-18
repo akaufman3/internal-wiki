@@ -1,5 +1,8 @@
 <section class="addArticleCont">
-	<form class="add" action ="/add" method="post">
+	<% if @article_submitted %>
+		<p class="contact-submitted">Your article has been created!</p>
+	<% else %>
+	<form class="add" action ="/add/" method="post">
 			<div class="input-row">
 				<input type="submit" value="Create" />
 			</div>
@@ -19,4 +22,5 @@
 				<textarea type="text" name="copy"></textarea>
 			</div>
 		</form>
+	<% end %>
 </section>
