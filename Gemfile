@@ -10,4 +10,5 @@ gem "sinatra"
 gem "sinatra-contrib"
 gem "capybara"
 gem "rspec"
-gem 'selenium-webdriver'
+gem "selenium-webdriver"
+gem "activesupport"

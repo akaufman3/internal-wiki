@@ -5,8 +5,9 @@
 				<h4><%= article['rating'] %></h4>
 			</section>
 			<section class="articleInfo">
-				<h3><a href="/<%= article['article_id'] %>"><%= article['title'] %></a></h3>
+				<h3><a href="/article/<%= article['article_id'] %>"><%= article['title'] %></a></h3>
 				<h6><%= article['author'] %></h6>
+				<h6><%= article['category'] %></h6>
 			</section>
 			<section class="articleDate">
 				<h4><%= article['date_created'] %></h4>
