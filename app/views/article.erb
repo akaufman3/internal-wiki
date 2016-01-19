@@ -1,12 +1,12 @@
 <section id="main" class="articleContainer">
-	<article class="article">
+	<article class="article_main">
 		<% @article_info.each do |data| %>
 			<form action="/edit/<%= data['id'] %>">
     			<input type="submit" value="EDIT">
 			</form>
 			<section class="bArticleInfo">
 				<h2><%= data['date_created'] %></h2>
-				<h2>Date updatd: <%= data['date_updated'] %></h2>
+				<h3>Date updated: <%= data['date_updated'] %></h3>
 				<h1><%= data['title'] %></h1>
 				<h4><%= data['category'] %></h4>
 				<h3><%= data['author'] %></h3>

@@ -26,7 +26,7 @@ class InternalWiki::Server < Sinatra::Base
     	author = params["author"]
     	copy = params["copy"]
     	article_id = params["article_id"]
-    	category= params["category"]
+    	category = params["category"]
     	date_created = DateTime.now
     	date_formatted = date_created.to_formatted_s(:long)
 
@@ -53,18 +53,17 @@ class InternalWiki::Server < Sinatra::Base
 
 	post "/edit/:article_id" do
 		@id = params[:article_id].to_i
-		binding.pry
 		title = params["title"]
     	author = params["author"]
     	copy = params["copy"]
-    	article_id = params["article_id"]
-    	category= params["category"]
+    	category = params["category"]
     	date_updated = DateTime.now
     	date_updated_formatted = date_updated.to_formatted_s(:long)
 
+    	db.exec("UPDATE article SET title = '#{title}', author = '#{author}', copy = '#{copy}', category = '#{category}', date_updated = 
+    	'#{date_updated_formatted}' WHERE id = #{@id}")
 
     	redirect "/article/#{@id}"
-    	erb :edit
 	end
 
 end

@@ -12,7 +12,7 @@ body {
 	margin-top: 65px;
 }
 
-.article {
+.articleIndex {
 	height: 100px;
 	border-bottom: 1px solid black;
 }
@@ -62,4 +62,8 @@ h6 {
 
 .clearfix:after {
 	clear: both;
+}
+
+.article_main {
+	height: 100%;
 }
