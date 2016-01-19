@@ -60,8 +60,9 @@ class InternalWiki::Server < Sinatra::Base
     	date_updated = DateTime.now
     	date_updated_formatted = date_updated.to_formatted_s(:long)
 
-    	db.exec("UPDATE article SET title = '#{title}', author = '#{author}', copy = '#{copy}', category = '#{category}', date_updated = 
-    	'#{date_updated_formatted}' WHERE id = #{@id}")
+    	db.exec("UPDATE article SET author = '#{author}', title = '#{title}', category = '#{category}',  date_updated = '#{date_updated_formatted}', copy = '#{copy}' WHERE id = #{@id}")
+
+    	db.exec("UPDATE article_list SET category = '#{category}', author = '#{author}', title = '#{title}' WHERE article_id = #{@id}")
 
     	redirect "/article/#{@id}"
 	end
