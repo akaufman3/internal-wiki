@@ -9,9 +9,9 @@
 				<label for="category">Category: </label>
 				<select name="category">
 					<% @categories.each do |category| %>
-						<% if category = data['category'] %>
+						<% if category['category'] == data['category'] %>
 							<option value="<%= data['category'] %>" selected><%= data['category'] %></option>
-						<% else %>
+						<% elsif category['category'] != data['category'] %>
 							<option value="<%= "#{category['category']}" %>"><%= "#{category['category']}" %></option>
 						<% end %>
 					<% end %>

@@ -7,7 +7,6 @@ class InternalWiki::Server < Sinatra::Base
 
 	get "/" do
 		@articles = db.exec_params("SELECT * FROM article_list").to_a
-		# binding.pry
 		erb :index
 	end
 
@@ -15,13 +14,6 @@ class InternalWiki::Server < Sinatra::Base
 		@article_id = params[:article_id].to_i
 		@article_info = db.exec("SELECT * FROM article WHERE id = #{@article_id}").to_a
 		erb :article
-	end
-
-	get "/edit/:article_id" do
-		@article_id = params[:article_id].to_i
-		@article_info = db.exec("SELECT * FROM article WHERE id = #{@article_id}").to_a
-		@categories = db.exec("SELECT * FROM categories").to_a
-		erb :edit
 	end
 
 	get "/add" do
@@ -50,6 +42,29 @@ class InternalWiki::Server < Sinatra::Base
     	redirect "/article/#{@new_article_id}"
 
 		erb :add
+	end
+
+	get "/edit/:article_id" do
+		@article_id = params[:article_id].to_i
+		@article_info = db.exec("SELECT * FROM article WHERE id = #{@article_id}").to_a
+		@categories = db.exec("SELECT * FROM categories").to_a
+		erb :edit
+	end
+
+	post "/edit/:article_id" do
+		@id = params[:article_id].to_i
+		binding.pry
+		title = params["title"]
+    	author = params["author"]
+    	copy = params["copy"]
+    	article_id = params["article_id"]
+    	category= params["category"]
+    	date_updated = DateTime.now
+    	date_updated_formatted = date_updated.to_formatted_s(:long)
+
+
+    	redirect "/article/#{@id}"
+    	erb :edit
 	end
 
 end

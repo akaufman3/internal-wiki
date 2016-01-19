@@ -16,6 +16,7 @@ CREATE TABLE article (
 	article_log_id  INTEGER,
 	comments_id		INTEGER,
 	date_created	VARCHAR,
+	date_updated	VARCHAR,
 	copy			VARCHAR,
 	rating			INTEGER,
 	id 				SERIAL PRIMARY KEY
