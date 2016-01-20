@@ -7,7 +7,7 @@
 
 			<div class="input-row">
 				<label for="category">Category: </label>
-				<select name="category">
+				<select id="category" name="category">
 					<% @categories.each do |category| %>
 						<% if category['category'] == data['category'] %>
 							<option value="<%= data['category'] %>" selected><%= data['category'] %></option>
@@ -20,17 +20,17 @@
 
 			<div class="input-row">
 				<label for="title">Title: </label>
-				<input type="text" name="title" value="<%= data['title'] %>"/>
+				<input id="title" type="text" name="title" value="<%= data['title'] %>"/>
 			</div>
 
 			<div class="input-row">
 				<label for="author">Author: </label>
-				<input type="text" name="author" value="<%= data['author'] %>"/>
+				<input if="author" type="text" name="author" value="<%= data['author'] %>"/>
 			</div>
 
 			<div class="input-row">
 				<label for="copy">Copy: </label>
-				<textarea type="text" name="copy"><%= data['copy'] %></textarea>
+				<textarea id="copy" type="text" name="copy"><%= data['copy'] %></textarea>
 			</div>
 		</form>
 	<% end %>

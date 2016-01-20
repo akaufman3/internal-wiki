@@ -1,13 +1,71 @@
 require "sinatra"
 require "pg"
 require "active_support/all"
+require "colorize"
 
 class InternalWiki::Server < Sinatra::Base
 	include InternalWiki
 
+	enable :sessions
+
+	def current_user
+		if session["user_id"]
+			@current_user ||= db.exec_params(<<-SQL, [session["user_id"]]).first
+				SELECT * FROM users WHERE id = $1
+			SQL
+		else
+			{}
+		end
+	end
+
 	get "/" do
 		@articles = db.exec_params("SELECT * FROM article_list").to_a
 		erb :index
+	end
+
+	get "/signup" do
+		erb :signup 
+	end
+
+	post "/signup" do
+		encrypted_password = BCrypt::Password.create(params[:password_digest])
+		new_user = db.exec_params(<<-SQL, [params[:fname], params[:lname], params[:position], params[:email], encrypted_password])
+			INSERT INTO users (fname, lname, position, email, password_digest)
+			VALUES ($1, $2, $3, $4, $5) RETURNING id;
+		SQL
+		session["user_id"] = new_user.first["id"]
+		redirect "/?login=true"
+	end
+
+	get "/login" do
+		erb :login
+	end
+
+	post "/login" do
+		@email = params[:email]
+		@password = params[:password]
+		@user_info = db.exec_params("SELECT * FROM users WHERE email = $1", [@email]).first
+		@user_password = @user_info["password_digest"]
+		puts "LOGIN ATTEMPTED".red
+		if @user_info
+			if BCrypt::Password.new(@user_password) == @password
+				puts "LOGIN SUCCESSFUL".red
+				session["user_id"] = @user_info["id"]
+				redirect "/?login=true"
+			else
+				puts "INCORRECT PASSWORD: ROUTE TO '/'".red
+				@error = "Invalid Password"
+				redirect "/login"
+			end
+		else
+			@error = "User does not exist"
+			erb :signup
+		end
+	end
+
+	get "/log_out" do
+		session["user_id"] = nil;
+		redirect "/"
 	end
 
 	get "/article/:article_id" do

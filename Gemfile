@@ -2,7 +2,6 @@
 source "https://rubygems.org"
 
 # gem "rails"
-gem "faker", git: "https://github.com/bryanmytko/faker"
 gem "pg"
 gem "pry"
 gem "rack"
@@ -12,3 +11,5 @@ gem "capybara"
 gem "rspec"
 gem "selenium-webdriver"
 gem "activesupport"
+gem "bcrypt"
+gem "colorize"

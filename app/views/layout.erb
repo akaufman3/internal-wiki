@@ -12,10 +12,26 @@
   </head>
 
   <body>
-  <h1>naviagation bar</h1>
-  <form action="/add">
-    <input type="submit" value="Add article">
-  </form>
+    <h1>naviagation bar</h1>
+    <% if session["user_id"] %>
+      <p>Thanks for signing up!</p>
+      <a href = "/log_out"><button type="">Log out</button></a>
+    <% elsif params['login']%>
+      Hello <%= current_user['fname'] %>
+      <a href = "/log_out"><button type="">Log out</button></a>
+    <% else %>
+      <div>
+        <h1>Login</h1>
+        <a href = "/login"><button type="">Login</button></a>
+      </div>
+      <div>
+        <h1>Need to sign up?</h1>
+        <a href="/signup"><button type="button">Sign up!</button></a>
+      </div>
+    <% end %>
+    <form action="/add">
+      <input type="submit" value="Add article">
+    </form>
     <%= yield %>
   </body>
 
