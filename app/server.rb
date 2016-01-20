@@ -31,7 +31,7 @@ class InternalWiki::Server < Sinatra::Base
 	end
 
 	get "/signup" do
-		if params[:e] == 2
+		if params[:e] == "2"
 			@error = "User does not exist"
 		end
 		erb :signup 
@@ -48,8 +48,7 @@ class InternalWiki::Server < Sinatra::Base
 	end
 
 	get "/login" do
-		# binding.pry
-		if params["e"] == 1
+		if params["e"] == "1"
 			@error = "Invalid Password"
 		end
 		erb :login
@@ -146,6 +145,15 @@ class InternalWiki::Server < Sinatra::Base
 	    end
 
     	redirect "/article/#{@id}"
+	end
+
+	delete '/edit/:article_id' do
+		@id = params[:article_id].to_i
+
+		# db.exec_params("DELETE FROM article WHERE id = $1",[@id]).first
+    	db.exec_params("DELETE FROM article_list WHERE article_id = $1",[@id]).first
+
+	  redirect '/'
 	end
 
 end
