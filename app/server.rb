@@ -26,7 +26,7 @@ class InternalWiki::Server < Sinatra::Base
 	end
 
 	get "/" do
-		@articles = db.exec_params("SELECT * FROM article_list").to_a
+		@articles = db.exec("SELECT * FROM article_list").to_a
 		erb :index
 	end
 
@@ -87,6 +87,8 @@ class InternalWiki::Server < Sinatra::Base
 	end
 
 	post "/add" do
+		creator = "#{current_user['fname']} #{current_user['lname']}"
+		user_id = current_user['id'].to_i
 		title = params["title"]
     	author = params["author"]
     	copy = params["copy"]
@@ -96,12 +98,13 @@ class InternalWiki::Server < Sinatra::Base
     	date_formatted = date_created.to_formatted_s(:long)
 
     	@make_article = db.exec_params(
-    		"INSERT INTO article (author, title, category, date_created, copy) VALUES ($1, $2, $3, $4, $5) RETURNING id",
-    		[author, title, category, date_formatted, copy]
+    		"INSERT INTO article (creator_name, user_id, author, title, category, date_created, copy) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id",
+    		[creator, user_id, author, title, category, date_formatted, copy]
     	)
 
     	@new_article_id = @make_article.to_a.first['id'].to_i
 
+    	#How do you reformat this line with params?
     	db.exec("INSERT INTO article_list (category, author, title, date_created, article_id) SELECT category, author, title, date_created, id FROM article WHERE id = #{@new_article_id}")
 
     	redirect "/article/#{@new_article_id}"
@@ -111,7 +114,7 @@ class InternalWiki::Server < Sinatra::Base
 
 	get "/article/:article_id" do
 		@article_id = params[:article_id].to_i
-		@article_info = db.exec("SELECT * FROM article WHERE id = #{@article_id}").to_a
+		@article_info = db.exec_params("SELECT * FROM article WHERE id = $1", [@article_id]).to_a
 		article_copy = @article_info.first["copy"]
 		@copy_rendered = markdown.render(article_copy)
 		erb :article
@@ -119,7 +122,7 @@ class InternalWiki::Server < Sinatra::Base
 
 	get "/edit/:article_id" do
 		@article_id = params[:article_id].to_i
-		@article_info = db.exec("SELECT * FROM article WHERE id = #{@article_id}").to_a
+		@article_info = db.exec("SELECT * FROM article WHERE id = $1", [@article_id]).to_a
 		@categories = db.exec("SELECT * FROM categories").to_a
 		erb :edit
 	end
@@ -131,15 +134,15 @@ class InternalWiki::Server < Sinatra::Base
     	copy = params["copy"]
     	category = params["category"]
 
-    	db_title = db.exec("SELECT title FROM article WHERE id = #{@id}").to_a.first["title"]
-    	db_author = db.exec("SELECT author FROM article WHERE id = #{@id}").to_a.first["author"]
-    	db_copy = db.exec("SELECT copy FROM article WHERE id = #{@id}").to_a.first["copy"]
-    	db_category = db.exec("SELECT category FROM article WHERE id = #{@id}").to_a.first["category"]
+    	db_title = db.exec_params("SELECT title FROM article WHERE id = $1", [@id]).to_a.first["title"]
+    	db_author = db.exec("SELECT author FROM article WHERE id = $1", [@id]).to_a.first["author"]
+    	db_copy = db.exec("SELECT copy FROM article WHERE id = $1", [@id]).to_a.first["copy"]
+    	db_category = db.exec("SELECT category FROM article WHERE id = $1", [@id]).to_a.first["category"]
     	if title != db_title || author != db_author || copy != db_copy || category != db_category
 	    	date_updated = DateTime.now
 	    	date_updated_formatted = date_updated.to_formatted_s(:long)
-	    	db.exec("UPDATE article SET author = '#{author}', title = '#{title}', category = '#{category}',  date_updated = '#{date_updated_formatted}', copy = '#{copy}' WHERE id = #{@id}")
-	    	db.exec("UPDATE article_list SET category = '#{category}', author = '#{author}', title = '#{title}' WHERE article_id = #{@id}")
+	    	db.exec_params("UPDATE article SET author = $1, title = $2, category = $3, date_updated = $4, copy = $5 WHERE id = $6", [author, title, category, date_updated_formatted, copy, @id])
+	    	db.exec_params("UPDATE article_list SET category = $1, author = $2, title = $3 WHERE article_id = $4", [category, author, title, @id])
 	    end
 
     	redirect "/article/#{@id}"
