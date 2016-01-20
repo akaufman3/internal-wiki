@@ -1,10 +1,6 @@
 <section class="addArticleCont">
 	<form class="add" action ="/add" method="post">
 		<div class="input-row">
-			<input type="submit" value="Create" />
-		</div>
-
-		<div class="input-row">
 			<label for="category">Category: </label>
 			<select id="category" name="category">
 				<% @categories.each do |category| %>
@@ -27,5 +23,10 @@
 			<label for="copy">Copy: </label>
 			<textarea id="copy" type="text" name="copy"></textarea>
 		</div>
+
+		<div class="input-row">
+			<input type="submit" value="Create" />
+		</div>
+
 	</form>
 </section>

@@ -41,7 +41,8 @@ class InternalWiki::Server < Sinatra::Base
 	end
 
 	get "/login" do
-		if params[:e] == 1
+		# binding.pry
+		if params["e"] == 1
 			@error = "Invalid Password"
 		end
 		erb :login
@@ -73,12 +74,6 @@ class InternalWiki::Server < Sinatra::Base
 		redirect "/login"
 	end
 
-	get "/article/:article_id" do
-		@article_id = params[:article_id].to_i
-		@article_info = db.exec("SELECT * FROM article WHERE id = #{@article_id}").to_a
-		erb :article
-	end
-
 	get "/add" do
 		@categories = db.exec("SELECT * FROM categories").to_a
 		erb :add
@@ -105,6 +100,12 @@ class InternalWiki::Server < Sinatra::Base
     	redirect "/article/#{@new_article_id}"
 
 		erb :add
+	end
+
+	get "/article/:article_id" do
+		@article_id = params[:article_id].to_i
+		@article_info = db.exec("SELECT * FROM article WHERE id = #{@article_id}").to_a
+		erb :article
 	end
 
 	get "/edit/:article_id" do
