@@ -1,4 +1,6 @@
-<% if @error %><%= @error %><% end %>
+<% if @error %>
+	<p><%= @error %></p>
+<% end %>
 <form action="/login" method="post">
 	<div class="input-row">
 		<label for="email">Email: </label><br />
@@ -7,7 +9,7 @@
 	
 	<div class="input-row">
 		<label for="password">Password: </label><br />
-		<input id="password" type="text" name="password"/>
+		<input id="password" type="password" name="password"/>
 	</div>
 
 	<div class="input-row">

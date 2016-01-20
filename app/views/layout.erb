@@ -14,6 +14,7 @@
   <body>
     <h1>naviagation bar</h1>
     <% if session["user_id"] %>
+      Hello <%= current_user['fname'] %>
       <p>Thanks for signing up!</p>
       <a href = "/log_out"><button type="">Log out</button></a>
     <% elsif params['login']%>
@@ -29,9 +30,6 @@
         <a href="/signup"><button type="button">Sign up!</button></a>
       </div>
     <% end %>
-    <form action="/add">
-      <input type="submit" value="Add article">
-    </form>
     <%= yield %>
   </body>
 

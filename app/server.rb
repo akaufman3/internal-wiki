@@ -24,6 +24,9 @@ class InternalWiki::Server < Sinatra::Base
 	end
 
 	get "/signup" do
+		if params[:e] == 2
+			@error = "User does not exist"
+		end
 		erb :signup 
 	end
 
@@ -38,6 +41,9 @@ class InternalWiki::Server < Sinatra::Base
 	end
 
 	get "/login" do
+		if params[:e] == 1
+			@error = "Invalid Password"
+		end
 		erb :login
 	end
 
@@ -55,17 +61,16 @@ class InternalWiki::Server < Sinatra::Base
 			else
 				puts "INCORRECT PASSWORD: ROUTE TO '/'".red
 				@error = "Invalid Password"
-				redirect "/login"
+				redirect "/login?e=1"
 			end
 		else
-			@error = "User does not exist"
-			erb :signup
+			redirect "/signup?e=2"
 		end
 	end
 
 	get "/log_out" do
 		session["user_id"] = nil;
-		redirect "/"
+		redirect "/login"
 	end
 
 	get "/article/:article_id" do
