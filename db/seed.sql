@@ -27,7 +27,7 @@ CREATE TABLE article (
 	comments_id		INTEGER,
 	date_created	VARCHAR,
 	date_updated	VARCHAR,
-	copy			VARCHAR,
+	copy			TEXT,
 	rating			INTEGER,
 	id 				SERIAL PRIMARY KEY
 );

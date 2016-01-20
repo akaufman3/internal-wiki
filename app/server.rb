@@ -2,11 +2,14 @@ require "sinatra"
 require "pg"
 require "active_support/all"
 require "colorize"
+require "redcarpet"
 
 class InternalWiki::Server < Sinatra::Base
 	include InternalWiki
 
 	enable :sessions
+
+	set :method_override, true
 
 	def current_user
 		if session["user_id"]
@@ -16,6 +19,10 @@ class InternalWiki::Server < Sinatra::Base
 		else
 			{}
 		end
+	end
+
+	def markdown 
+		@markdown ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML)
 	end
 
 	get "/" do
@@ -105,6 +112,8 @@ class InternalWiki::Server < Sinatra::Base
 	get "/article/:article_id" do
 		@article_id = params[:article_id].to_i
 		@article_info = db.exec("SELECT * FROM article WHERE id = #{@article_id}").to_a
+		article_copy = @article_info.first["copy"]
+		@copy_rendered = markdown.render(article_copy)
 		erb :article
 	end
 
@@ -115,7 +124,7 @@ class InternalWiki::Server < Sinatra::Base
 		erb :edit
 	end
 
-	post "/edit/:article_id" do
+	put "/edit/:article_id" do
 		@id = params[:article_id].to_i
 		title = params["title"]
     	author = params["author"]

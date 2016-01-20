@@ -1,6 +1,7 @@
 <section id="main" class="articleContainer">
 	<% @article_info.each do |data| %>
 		<form class="edit" action ="/edit/<%= data['id'] %>" method="post">
+			<input type="hidden" name="_method" value="put">
 			<div class="input-row">
 				<input type="submit" value="Save" />
 			</div>
