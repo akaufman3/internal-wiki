@@ -18,8 +18,8 @@ CREATE TABLE categories (
 );
 
 CREATE TABLE article (
-	author_id		INTEGER,
-	user_id			INTEGER,
+	creator_name	VARCHAR,
+	user_id			INTEGER REFERENCES users(id),
 	author			VARCHAR,
 	title			VARCHAR,
 	category		VARCHAR,

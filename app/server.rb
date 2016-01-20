@@ -121,12 +121,17 @@ class InternalWiki::Server < Sinatra::Base
     	author = params["author"]
     	copy = params["copy"]
     	category = params["category"]
-    	date_updated = DateTime.now
-    	date_updated_formatted = date_updated.to_formatted_s(:long)
 
-    	db.exec("UPDATE article SET author = '#{author}', title = '#{title}', category = '#{category}',  date_updated = '#{date_updated_formatted}', copy = '#{copy}' WHERE id = #{@id}")
-
-    	db.exec("UPDATE article_list SET category = '#{category}', author = '#{author}', title = '#{title}' WHERE article_id = #{@id}")
+    	db_title = db.exec("SELECT title FROM article WHERE id = #{@id}").to_a.first["title"]
+    	db_author = db.exec("SELECT author FROM article WHERE id = #{@id}").to_a.first["author"]
+    	db_copy = db.exec("SELECT copy FROM article WHERE id = #{@id}").to_a.first["copy"]
+    	db_category = db.exec("SELECT category FROM article WHERE id = #{@id}").to_a.first["category"]
+    	if title != db_title || author != db_author || copy != db_copy || category != db_category
+	    	date_updated = DateTime.now
+	    	date_updated_formatted = date_updated.to_formatted_s(:long)
+	    	db.exec("UPDATE article SET author = '#{author}', title = '#{title}', category = '#{category}',  date_updated = '#{date_updated_formatted}', copy = '#{copy}' WHERE id = #{@id}")
+	    	db.exec("UPDATE article_list SET category = '#{category}', author = '#{author}', title = '#{title}' WHERE article_id = #{@id}")
+	    end
 
     	redirect "/article/#{@id}"
 	end
