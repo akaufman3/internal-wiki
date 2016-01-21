@@ -24,15 +24,23 @@
 </section>
 
 <section class="commentBox">
-	<form class="commentForm" action ="/article/<%= data['id'] %>" method="post">
+	<form class="commentForm" action="/submit/<%= data['id'] %>" method="post">
 		<div class="input-row">
 			<label for="commentEntry">Enter a comment: </label><br />
 			<textarea id="commentEntry" type="text" name="commentEntry"></textarea>
+		</div>
+		<div class="input-row">
+			<input type="submit" value="Save" />
 		</div>
 	</form>
 	<% end %>
 </section>
 
-<section class="comments">
-	<%= yield %>
+
+	<section class="comments">
+		<% @all_comments.each do |comment| %>
+			<p><%= comment['comment'] %></p>
+			<p><%= comment['date_created'] %></p>
+			<p><%= comment['author'] %></p>
+		<% end %>
 </section>

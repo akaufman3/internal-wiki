@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS article CASCADE;
 DROP TABLE IF EXISTS article_list CASCADE;
-DROP TABLE IF EXISTS comments CASCADE;
+DROP TABLE IF EXISTS comment CASCADE;
+
 
 CREATE TABLE users (
 	id				SERIAL PRIMARY KEY,
@@ -17,22 +18,6 @@ CREATE TABLE categories (
 	id 	 	 SERIAL PRIMARY KEY,
 	category VARCHAR
 );
-
-CREATE TABLE comment (
-	id  			SERIAL PRIMARY KEY,
-	comment 		TEXT,
-	author 			VARCHAR,
-	date_created	VARCHAR
-)
-
-CREATE TABLE comments_list (
-	id 				SERIAL PRIMARY KEY,
-	article_id 		INTEGER REFERENCES article(id)
-	comment_id  	INTEGER REFERENCES comment(id),
-	comment 		TEXT REFERENCES comment(comment),
-	author 			VARCHAR REFERENCES comment(author),
-	date_created	VARCHAR REFERENCES comment(date_created)
-)
 
 CREATE TABLE article (
 	creator_name	VARCHAR,
@@ -55,6 +40,14 @@ CREATE TABLE article_list (
 	rating		 	INTEGER,
 	date_created 	VARCHAR,
 	article_id 	 	INTEGER REFERENCES article(id)
+);
+
+CREATE TABLE comment (
+	id  			SERIAL PRIMARY KEY,
+	comment 		TEXT,
+	author 			VARCHAR,
+	date_created	VARCHAR,
+	article_id 		INTEGER REFERENCES article(id)
 );
 
 -- create categories

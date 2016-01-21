@@ -116,6 +116,9 @@ class InternalWiki::Server < Sinatra::Base
 		@article_info = db.exec_params("SELECT * FROM article WHERE id = $1", [@article_id]).to_a
 		article_copy = @article_info.first["copy"]
 		@copy_rendered = markdown.render(article_copy)
+
+		@all_comments = db.exec_params("SELECT * FROM comment WHERE article_id = $1", [@article_id]).to_a
+		binding.pry
 		erb :article
 	end
 
@@ -154,6 +157,21 @@ class InternalWiki::Server < Sinatra::Base
     	db.exec_params("DELETE FROM article_list WHERE article_id = $1",[@id]).first
 
 	  redirect '/'
+	end
+
+	post '/submit/:article_id' do
+		@article_id = params[:article_id].to_i
+		comment = params[:commentEntry]
+		author = "#{current_user['fname']} #{current_user['lname']}"
+		date_created = DateTime.now
+    	date_formatted = date_created.to_formatted_s(:long)
+
+    	db.exec_params(
+    		"INSERT INTO comment (article_id, comment, author, date_created) VALUES ($1, $2, $3, $4)",
+    		[@article_id, comment, author, date_formatted]
+    	)
+
+		redirect "/article/#{@article_id}"
 	end
 
 end
