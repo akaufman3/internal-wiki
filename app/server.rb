@@ -11,6 +11,15 @@ class InternalWiki::Server < Sinatra::Base
 
 	set :method_override, true
 
+	if ENV['RACK_ENV'] == 'production'
+      @@db = PG.connect(
+        dbname: ENV['POSTGRES_DB'],
+        host: ENV['POSTGRES_HOST'],
+        password: ENV['POSTGRES_PASS'],
+        user: ENV['POSTGRES_USER']
+      )
+    end
+
 	def current_user
 		if session["user_id"]
 			@current_user ||= db.exec_params(<<-SQL, [session["user_id"]]).first
