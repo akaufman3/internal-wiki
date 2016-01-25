@@ -6,19 +6,28 @@
 	    			<input type="submit" value="EDIT">
 				</form>
 			<% end %>
-			<section class="bArticleInfo">
-				<h2><%= data['date_created'] %></h2>
-				<% if data['date_updated'] != nil %>
-					<h3>Date updated: <%= data['date_updated'] %></h3>
-				<% end %>
+			<div class="bArticleInfo">
 				<h1><%= data['title'] %></h1>
-				<h4><%= data['category'] %></h4>
 				<h3><%= data['author'] %></h3>
-				<h4><%= data['rating'] %></h4>
-			</section>
-			<section class="articleContent">
+				<h4><%= data['date_created'] %></h4>
+				<% if data['date_updated'] != nil %>
+					<h4>Date updated: <%= data['date_updated'] %></h4>
+				<% end %>
+				<h4><%= data['category'] %></h4>
+				<h4>Rating: <%= data['rating'] %></h4>
+				<form action="/rating/<%= data['id'] %>" method="post">
+					<input type="hidden" name="_method" value="put">
+					<input type="radio" id="rating" name="rating" value="1">1
+  					<input type="radio" id="rating" name="rating" value="2">2
+  					<input type="radio" id="rating" name="rating" value="3">3
+					<input type="radio" id="rating" name="rating" value="4">4
+					<input type="radio" id="rating" name="rating" value="5">5
+					<input type="submit" value="Rate">
+				</form>
+			</div>
+			<div class="articleContent">
 				<%= @copy_rendered %>
-			</section>
+			</div>
 	</article>
 	<div class="clearfix"></div>
 </section>

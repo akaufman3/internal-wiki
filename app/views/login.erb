@@ -1,19 +1,26 @@
 <% if params[:e] %>
 	<%= @error %> 
 <% end %>
-<form action="/login" method="post">
-	<div class="input-row">
-		<label for="email">Email: </label><br />
-		<input id="email" type="text" name="email"/>
-	</div>
-	
-	<div class="input-row">
-		<label for="password">Password: </label><br />
-		<input id="password" type="password" name="password"/>
-	</div>
-
-	<div class="input-row">
-		<input type="submit" value="Login" />
-	</div>	
-</form>
-
+<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+  	<div class="mdl-card__title">
+    	<h2 class="mdl-card__title-text">Login</h2>
+  	</div>
+	<form action="/login" method="post">
+	  	<div class="mdl-card__supporting-text">
+			<div class="input-row mdl-textfield mdl-js-textfield">
+				<input class="mdl-textfield__input" id="email" type="text" name="email"/>
+				<label class="mdl-textfield__label" for="email">Email</label>
+			</div>
+			
+			<div class="input-row mdl-textfield mdl-js-textfield">
+				<input class="mdl-textfield__input" id="password" type="password" name="password"/>
+				<label class="mdl-textfield__label" for="password">Password</label>
+			</div>
+  		</div>
+  		<div class="mdl-card__actions mdl-card--border">
+    		<div class="input-row">
+				<input type="submit" value="Login" />
+			</div>	
+ 		</div>
+	</form>
+</div>

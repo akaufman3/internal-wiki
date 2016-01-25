@@ -1,35 +1,50 @@
-<!doctype html>
+ <!doctype html>
 <html class="no-js" lang="">
   <head>
   	<meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Internal-Wiki</title>
-    <link rel="stylesheet" href="/stylesheets/styles.css">
+<!--     <link rel="stylesheet" href="/stylesheets/styles.css">
     <link rel="stylesheet" href="/stylesheets/normalize.css" media="screen" charset="utf-8">
-    <link rel="stylesheet" href="/stylesheets/html5bp.css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="/stylesheets/html5bp.css" media="screen" charset="utf-8"> -->
+    <link rel="stylesheet" href="/stylesheets/material.css">
+    <script src="/stylesheets/material.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
 
   <body>
-    <h1>naviagation bar</h1>
-    <% if session["user_id"] %>
-      Hello <%= current_user['fname'] %>
-      <p>Thanks for signing up!</p>
-      <a href = "/log_out"><button type="">Log out</button></a>
-    <% elsif params['login']%>
-      Hello <%= current_user['fname'] %>
-      <a href = "/log_out"><button type="">Log out</button></a>
-    <% else %>
-      <div>
-        <h1>Login</h1>
-        <a href = "/login"><button type="">Login</button></a>
-      </div>
-      <div>
-        <h1>Need to sign up?</h1>
-        <a href="/signup"><button type="button">Sign up!</button></a>
-      </div>
-    <% end %>
+    <div class="mdl-layout mdl-js-layout">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <!-- Title -->
+          <% if session["user_id"] %>
+          <span class="mdl-layout-title"> Hello <%= current_user['fname'] %>.</span>    
+          <!-- Add spacer, to align navigation to the right -->
+            <div class="mdl-layout-spacer"></div>
+            <nav class="mdl-navigation">
+              <a class="mdl-navigation__link" href="/log_out">Log out</a>
+            </nav>
+          <% elsif params['login']%>
+            <span class="mdl-layout-title"><%= current_user['fname'] %></span> 
+            <div class="mdl-layout-spacer"></div>
+            <nav class="mdl-navigation">
+              <a class="mdl-navigation__link" href = "/log_out">Log out</a>
+            </nav>
+          <% else %>
+            <span class="mdl-layout-title">Welcome!</span> 
+            <div class="mdl-layout-spacer"></div>
+            <nav class="mdl-navigation">
+              <a class="mdl-navigation__link" href = "/login">Login</a>
+              <a class="mdl-navigation__link" href="/signup">Sign up!</a>
+            </nav>
+          <% end %>
+        </div>
+      </header>
+      <main class="mdl-layout__content">
+      </main>
+    </div>
     <%= yield %>
   </body>
 

@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS article CASCADE;
 DROP TABLE IF EXISTS article_list CASCADE;
 DROP TABLE IF EXISTS comment CASCADE;
+DROP TABLE IF EXISTS article_rating CASCADE;
 
 
 CREATE TABLE users (
@@ -30,6 +31,7 @@ CREATE TABLE article (
 	date_updated	VARCHAR,
 	copy			TEXT,
 	rating			INTEGER,
+	total_votes		INTEGER,
 	id 				SERIAL PRIMARY KEY
 );
 
@@ -48,6 +50,15 @@ CREATE TABLE comment (
 	author 			VARCHAR,
 	date_created	VARCHAR,
 	article_id 		INTEGER REFERENCES article(id)
+);
+
+CREATE TABLE article_rating (
+	article_id 	INTEGER REFERENCES article(id),
+	five 		INTEGER,
+	four		INTEGER,
+	three		INTEGER,
+	two			INTEGER,
+	one			INTEGER
 );
 
 -- create categories

@@ -1,23 +1,25 @@
 <% if session["user_id"] != nil %>
 <form action="/add">
-  <input type="submit" value="Add article">
+  <input class="addArticle" type="submit" value="Add article">
 </form>
 <% end %>
-<section id="main" class="articleContainer">
-	<% @articles.each do |article| %>
-		<article class="articleIndex">
-			<section class="rating">
-				<h4><%= article['rating'] %></h4>
-			</section>
-			<section class="articleInfo">
-				<h3><a href="/article/<%= article['article_id'] %>"><%= article['title'] %></a></h3>
-				<h6><%= article['author'] %></h6>
-				<h6><%= article['category'] %></h6>
-			</section>
-			<section class="articleDate">
-				<h4><%= article['date_created'] %></h4>
-			</section>
-		</article>
-	<% end %>
-	<div class="clearfix"></div>
-</section>
+
+
+<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+	<thead>
+	   	<tr>
+	      <th class="mdl-data-table__cell--non-numeric">Top Articles</th>
+	    </tr>
+	</thead>
+	<tbody>
+		<% @articles.each do |article| %>
+			<tr>
+	      		<td><%= article['rating'] %></td>
+	      		<td><a href="/article/<%= article['article_id'] %>"><%= article['title'] %></a></td>
+	    		<td><%= article['author'] %></td>
+	    		<td><%= article['category'] %></td>
+	    		<td><%= article['date_created'] %></td>
+	    	</tr>
+    	<% end %>
+    </tbody>
+</table>

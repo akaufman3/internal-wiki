@@ -26,7 +26,7 @@ class InternalWiki::Server < Sinatra::Base
 	end
 
 	get "/" do
-		@articles = db.exec("SELECT * FROM article_list").to_a
+		@articles = db.exec("SELECT * FROM article_list ORDER BY rating LIMIT 10").to_a
 		erb :index
 	end
 
@@ -97,14 +97,20 @@ class InternalWiki::Server < Sinatra::Base
     	date_formatted = date_created.to_formatted_s(:long)
 
     	@make_article = db.exec_params(
-    		"INSERT INTO article (creator_name, user_id, author, title, category, date_created, copy) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id",
-    		[creator, user_id, author, title, category, date_formatted, copy]
+    		"INSERT INTO article (creator_name, user_id, author, title, category, date_created, copy, rating, total_votes) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id",
+    		[creator, user_id, author, title, category, date_formatted, copy, 0, 0]
     	)
 
     	@new_article_id = @make_article.to_a.first['id'].to_i
 
     	#How do you reformat this line with params?
     	db.exec("INSERT INTO article_list (category, author, title, date_created, article_id) SELECT category, author, title, date_created, id FROM article WHERE id = #{@new_article_id}")
+
+
+    	db.exec_params(
+    		"INSERT INTO article_rating (article_id, five, four, three, two, one) VALUES ($1, $2, $3, $4, $5, $6)",
+    		[@new_article_id, 0, 0, 0, 0, 0]
+    	)
 
     	redirect "/article/#{@new_article_id}"
 
@@ -118,7 +124,7 @@ class InternalWiki::Server < Sinatra::Base
 		@copy_rendered = markdown.render(article_copy)
 
 		@all_comments = db.exec_params("SELECT * FROM comment WHERE article_id = $1", [@article_id]).to_a
-		binding.pry
+
 		erb :article
 	end
 
@@ -170,6 +176,94 @@ class InternalWiki::Server < Sinatra::Base
     		"INSERT INTO comment (article_id, comment, author, date_created) VALUES ($1, $2, $3, $4)",
     		[@article_id, comment, author, date_formatted]
     	)
+
+		redirect "/article/#{@article_id}"
+	end
+
+	put '/rating/:article_id' do
+		@article_id = params[:article_id].to_i		
+		rating = params[:rating].to_i
+
+		db_total_five = db.exec_params("SELECT * FROM article_rating WHERE article_id = $1", [@article_id]).to_a.first["five"].to_i
+		db_total_four = db.exec_params("SELECT * FROM article_rating WHERE article_id = $1", [@article_id]).to_a.first["four"].to_i
+		db_total_three = db.exec_params("SELECT * FROM article_rating WHERE article_id = $1", [@article_id]).to_a.first["three"].to_i
+		db_total_two = db.exec_params("SELECT * FROM article_rating WHERE article_id = $1", [@article_id]).to_a.first["two"].to_i
+		db_total_one = db.exec_params("SELECT * FROM article_rating WHERE article_id = $1", [@article_id]).to_a.first["one"].to_i
+		db_total_votes = db.exec_params("SELECT * FROM article WHERE id = $1", [@article_id]).to_a.first["total_votes"].to_i
+		db_article_rating = db.exec_params("SELECT * FROM article WHERE id = $1", [@article_id]).to_a.first["rating"].to_i
+		
+		if rating != 5
+			new_db_total_rating_five = db_total_five
+		elsif rating == 5
+			new_db_total_rating_five = db_total_five + 1
+			db.exec_params("UPDATE article_rating SET five = $1", [new_db_total_rating_five])
+		end
+
+		if rating != 4
+			new_db_total_rating_four = db_total_four
+		elsif rating == 4
+			new_db_total_rating_four =  db_total_four + 1
+			db.exec_params("UPDATE article_rating SET four = $1", [new_db_total_rating_four])
+		end
+
+		if rating != 3
+			new_db_total_rating_three = db_total_three
+		elsif rating == 3
+			new_db_total_rating_three =  db_total_three + 1
+			db.exec_params("UPDATE article_rating SET three = $1", [new_db_total_rating_three])
+		end
+
+		if rating != 2
+			new_db_total_rating_two = db_total_two
+		elsif rating == 2
+			new_db_total_rating_two =  db_total_two + 1
+			db.exec_params("UPDATE article_rating SET two = $1", [new_db_total_rating_two])
+		end
+
+		if rating != 1
+			new_db_total_rating_one = db_total_one
+		elsif rating == 1
+			new_db_total_rating_one = db_total_one + 1
+			db.exec_params("UPDATE article_rating SET one = $1", [new_db_total_rating_one])
+		end
+
+		if new_db_total_rating_five != 0
+			total_five = new_db_total_rating_five * 5
+		else
+			total_five = 0
+		end
+
+		if new_db_total_rating_four != 0
+			total_four = new_db_total_rating_four * 4
+		else
+			total_four = 0
+		end
+
+		if new_db_total_rating_three != 0
+			total_three = new_db_total_rating_three * 3
+		else
+			total_three = 0
+		end
+
+		if new_db_total_rating_two != 0
+			total_two = new_db_total_rating_two * 2
+		else
+			total_two = 0
+		end
+
+		if new_db_total_rating_one != 0
+			total_one = new_db_total_rating_one * 1
+		else 
+			total_one = 0
+		end
+
+		total_vote_value = total_five + total_four + total_three + total_two + total_one
+		new_number_votes = db_total_votes + 1
+		new_rating = (total_vote_value) / new_number_votes
+
+		db.exec_params("UPDATE article SET rating = $1, total_votes = $2 WHERE id = $3", [new_rating, new_number_votes, @article_id])
+
+		db.exec_params("UPDATE article_list SET rating = $1 WHERE article_id = $2", [new_rating, @article_id])
 
 		redirect "/article/#{@article_id}"
 	end
