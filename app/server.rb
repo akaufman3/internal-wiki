@@ -4,15 +4,18 @@ require "active_support/all"
 require "colorize"
 require "redcarpet"
 
+require_relative "internal_wiki"
+
+
 class InternalWiki::Server < Sinatra::Base
-	include InternalWiki
+	# include InternalWiki
 
 	enable :sessions
 
 	set :method_override, true
 
 	if ENV['RACK_ENV'] == 'production'
-      @@db = PG.connect(
+     	@@db = PG.connect(
         dbname: ENV['POSTGRES_DB'],
         host: ENV['POSTGRES_HOST'],
         password: ENV['POSTGRES_PASS'],
