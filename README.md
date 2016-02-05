@@ -5,8 +5,12 @@ This project is similar to a basic CMS. "Editors" can create or edit any files w
 ![feature_set_1](http://i.imgur.com/HmdVwy7.jpg)
 ![feature_set_2](http://i.imgur.com/dYROSoY.jpg)
 
-The project's name and description
-Your feature spec with links to pictures of your wireframes
-A representation of your ERD - a picture of a whiteboard drawing will work just fine here
-APIs or modules used and descriptions of each
-Instructions for downloading the code and running it on localhost
+#ERDs
+![erd_1](http://i.imgur.com/OJSDBlB.jpg)
+![erd_2](http://i.imgur.com/Qicu3Ff.jpg)
+
+#Wireframes
+![wireframe_1](http://i.imgur.com/EJJR2Sp.jpg)
+![wireframe_2](http://i.imgur.com/9QDJ32V.jpg)
+![wireframe_3](http://i.imgur.com/2wpVTiM.jpg)
+![wireframe_4](http://i.imgur.com/o7FJsGT.jpg)
